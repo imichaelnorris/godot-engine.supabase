@@ -1,20 +1,20 @@
 extends Node
 
-const ENVIRONMENT_VARIABLES : String = "supabase/config"
+const ENVIRONMENT_VARIABLES: String = "supabase/config"
 
-var auth : SupabaseAuth 
-var database : SupabaseDatabase
-var realtime : SupabaseRealtime
-var storage : SupabaseStorage
+var auth: SupabaseAuth
+var database: SupabaseDatabase
+var realtime: SupabaseRealtime
+var storage: SupabaseStorage
 
-var debug: bool = false
+var _debug: bool = false
 
-var config : Dictionary = {
+var config: Dictionary = {
 	"supabaseUrl": "",
 	"supabaseKey": ""
 }
 
-var header : PoolStringArray = [
+var header: PackedStringArray = [
 	"Content-Type: application/json",
 	"Accept: application/json"
 ]
@@ -27,19 +27,19 @@ func _ready() -> void:
 func load_config() -> void:
 	if config.supabaseKey != "" and config.supabaseUrl != "":
 		pass
-	else:    
+	else:
 		var env = ConfigFile.new()
 		var err = env.load("res://addons/supabase/.env")
 		if err == OK:
-			for key in config.keys(): 
-				var value : String = env.get_value(ENVIRONMENT_VARIABLES, key, "")
+			for key in config.keys():
+				var value: String = env.get_value(ENVIRONMENT_VARIABLES, key, "")
 				if value == "":
 					printerr("%s has not a valid value." % key)
 				else:
 					config[key] = value
 		else:
 			printerr("Unable to read .env file at path 'res://.env'")
-	header.append("apikey: %s"%[config.supabaseKey])
+	header.append("apikey: %s" % [config.supabaseKey])
 
 func load_nodes() -> void:
 	auth = SupabaseAuth.new(config, header)
@@ -52,7 +52,7 @@ func load_nodes() -> void:
 	add_child(storage)
 
 func debug(debugging: bool) -> void:
-	debug = debugging
+	_debug = debugging
 
 func _print_debug(msg: String) -> void:
-	if debug: print_debug(msg)
+	if _debug: print_debug(msg)

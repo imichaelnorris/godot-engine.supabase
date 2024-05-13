@@ -1,13 +1,13 @@
-extends Reference
+extends RefCounted
 class_name SupabaseAuthError
 
-var _error : Dictionary
-var type : String = "(undefined)"
-var description : String = "(undefined)"
+var _error: Dictionary
+var type: String = "(undefined)"
+var description: String = "(undefined)"
 
-func _init(dictionary : Dictionary = {}) -> void:
+func _init(dictionary: Dictionary={}) -> void:
 	_error = dictionary
-	if not _error.empty():
+	if not _error.is_empty():
 		type = _error.get("error", "(undefined)")
 		description = _error.get("error_description", "(undefined)")
 		if _error.has("code"):
